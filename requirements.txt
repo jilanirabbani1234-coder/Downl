@@ -1,0 +1,14 @@
+m3u8
+pytz
+requests
+yt-dlp
+tgcrypto
+cloudscraper
+pycryptodome
+beautifulsoup4
+aiohttp
+aiofiles
+pytube
+pyromod
+pyrogram
+ffmpeg-python
