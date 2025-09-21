@@ -239,7 +239,7 @@ async def text_to_txt(client, message: Message):
     user_id = str(message.from_user.id)
     # Inform the user to send the text data and its desired file name
     editable = await message.reply_text(f"<blockquote><b>Welcome to the Text to .txt Converter!\nSend the **text** for convert into a `.txt` file.</b></blockquote>")
-    input_message: Message = await bot.listen(message.chat.id)
+    input_message: Message = await bot.listen(chat_id=message.chat.id)
     if not input_message.text:
         await message.reply_text("**Send valid text data**")
         return
@@ -248,7 +248,7 @@ async def text_to_txt(client, message: Message):
     await input_message.delete()  # Corrected here
     
     await editable.edit("**🔄 Send file name or send /d for filename**")
-    inputn: Message = await bot.listen(message.chat.id)
+    inputn: Message = await bot.listen(chat_id=message.chat.id)
     raw_textn = inputn.text
     await inputn.delete()  # Corrected here
     await editable.delete()
@@ -278,7 +278,7 @@ async def youtube_to_txt(client, message: Message):
         f"<blockquote><b>Send YouTube Website/Playlist link for convert in .txt file</b></blockquote>"
     )
 
-    input_message: Message = await bot.listen(message.chat.id)
+    input_message: Message = await bot.listen(chat_id=message.chat.id)
     youtube_link = input_message.text.strip()
     await input_message.delete(True)
     await editable.delete(True)
