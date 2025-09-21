@@ -405,6 +405,7 @@ async def txt_handler(bot: Client, m: Message):
             url = "https://" + Vxy
             oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
             response = requests.get(oembed_url)
+            audio_title = response.json().get('title', 'YouTube Video')
             audio_title = re.sub(r'[\\/*?:"<>|]', "_", audio_title)
             audio_title = audio_title.replace("_", " ")
             name = f'{audio_title[:60]} {CREDIT}'        
@@ -1506,6 +1507,7 @@ async def text_handler(bot: Client, m: Message):
             if "youtu" in url:
                 oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
                 response = requests.get(oembed_url)
+                audio_title = response.json().get('title', 'YouTube Video')
                 audio_title = re.sub(r'[\\/*?:"<>|]', "_", audio_title)
                 audio_title = audio_title.replace("_", " ")
                 name = f'{audio_title[:60]}'        
