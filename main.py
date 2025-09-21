@@ -404,8 +404,11 @@ async def txt_handler(bot: Client, m: Message):
             Vxy = links[i][1].replace("www.youtube-nocookie.com/embed", "youtu.be")
             url = "https://" + Vxy
             oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
+            audio_title = "YouTube Video"
             response = requests.get(oembed_url)
             audio_title = response.json().get('title', 'YouTube Video')
+            except Exception as e:
+                print(f"Warning: Could not fetch title, using default. Error: {e}")
             audio_title = re.sub(r'[\\/*?:"<>|]', "_", audio_title)
             audio_title = audio_title.replace("_", " ")
             name = f'{audio_title[:60]} {CREDIT}'        
@@ -1506,8 +1509,11 @@ async def text_handler(bot: Client, m: Message):
 
             if "youtu" in url:
                 oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
+                audio_title = "YouTube Video"  # <- add this line at the very top
                 response = requests.get(oembed_url)
                 audio_title = response.json().get('title', 'YouTube Video')
+                except Exception as e:
+                    print(f"Warning: Could not fetch title, using default. Error: {e}")
                 audio_title = re.sub(r'[\\/*?:"<>|]', "_", audio_title)
                 audio_title = audio_title.replace("_", " ")
                 name = f'{audio_title[:60]}'        
