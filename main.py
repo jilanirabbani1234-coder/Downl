@@ -239,7 +239,7 @@ async def text_to_txt(client, message: Message):
     user_id = str(message.from_user.id)
     # Inform the user to send the text data and its desired file name
     editable = await message.reply_text(f"<blockquote><b>Welcome to the Text to .txt Converter!\nSend the **text** for convert into a `.txt` file.</b></blockquote>")
-    input_message: Message = await bot.listen(chat_id=message.chat.id)
+    input_message: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     if not input_message.text:
         await message.reply_text("**Send valid text data**")
         return
@@ -248,7 +248,7 @@ async def text_to_txt(client, message: Message):
     await input_message.delete()  # Corrected here
     
     await editable.edit("**🔄 Send file name or send /d for filename**")
-    inputn: Message = await bot.listen(chat_id=message.chat.id)
+    inputn: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     raw_textn = inputn.text
     await inputn.delete()  # Corrected here
     await editable.delete()
@@ -278,7 +278,7 @@ async def youtube_to_txt(client, message: Message):
         f"<blockquote><b>Send YouTube Website/Playlist link for convert in .txt file</b></blockquote>"
     )
 
-    input_message: Message = await bot.listen(chat_id=message.chat.id)
+    input_message: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     youtube_link = input_message.text.strip()
     await input_message.delete(True)
     await editable.delete(True)
@@ -339,7 +339,7 @@ async def txt_handler(bot: Client, m: Message):
     processing_request = True
     cancel_requested = False
     editable = await m.reply_text("__**Input Type**__\n\n<blockquote><b>01 •Send me the .txt file containing YouTube links\n02 •Send Single link or Set of YouTube multiple links</b></blockquote>")
-    input: Message = await bot.listen(editable.chat.id)
+    input: Message = await bot.listen(editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     if input.document and input.document.file_name.endswith(".txt"):
         x = await input.download()
         file_name, ext = os.path.splitext(os.path.basename(x))
@@ -359,7 +359,7 @@ async def txt_handler(bot: Client, m: Message):
 
         await editable.edit(f"**•ᴛᴏᴛᴀʟ 🔗 ʟɪɴᴋs ғᴏᴜɴᴅ ᴀʀᴇ --__{len(links)}__--\n•sᴇɴᴅ ғʀᴏᴍ ᴡʜᴇʀᴇ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴅᴏᴡɴʟᴏᴀᴅ**")
         try:
-            input0: Message = await bot.listen(editable.chat.id, timeout=20)
+            input0: Message = await bot.listen(editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
             raw_text = input0.text
             await input0.delete(True)
         except asyncio.TimeoutError:
@@ -461,7 +461,7 @@ async def getcookies_handler(client: Client, m: Message):
 async def caption_handler(client: Client, m: Message):
     global caption
     editable = await m.reply_text("**Caption Style**\n\n<b>01 •Send /d for Default Caption Style.\n02. •Send /simple for Simple Caption Style.</b>")
-    inputcap: Message = await bot.listen(chat_id=message.chat.id)
+    inputcap: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     caption = inputcap.text
     if caption == '/d':
         await editable.edit(f"**Caption Set in Default Style ✅**")
@@ -473,7 +473,7 @@ async def caption_handler(client: Client, m: Message):
 async def vidwatermark_handler(client: Client, m: Message):
     global vidwatermark
     editable = await m.reply_text("**Send Video Watermark text, else Send /d**")
-    input8: Message = await bot.listen(chat_id=message.chat.id)
+    input8: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     vidwatermark  = input8.text
     if vidwatermark == '/d':
         await editable.edit(f"**Video Watermark Disabled ✅**")
@@ -485,7 +485,7 @@ async def vidwatermark_handler(client: Client, m: Message):
 async def topic_handler(client: Client, m: Message):
     global topic
     editable = await m.reply_text("**If you want to topic wise uploader : send `yes` or send /d**\n\n<blockquote><b>Topic fetch from (bracket) in title</b></blockquote>")
-    input: Message = await bot.listen(chat_id=message.chat.id)
+    input: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     topic = input.text
     if topic == "yes":
         await editable.edit(f"**Topic Wise Uploading On ✅**")
@@ -497,7 +497,7 @@ async def topic_handler(client: Client, m: Message):
 async def token_handler(client: Client, m: Message):
     global cwtoken, cptoken, pwtoken
     editable = await m.reply_text("<b>Enter 𝐏𝐖/𝐂𝐖/𝐂𝐏 Working Token For 𝐌𝐏𝐃 𝐔𝐑𝐋 or send /d</b>")
-    input: Message = await bot.listen(chat_id=message.chat.id)
+    input: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     token = input.text
     if token == '/d':
         cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
@@ -928,7 +928,7 @@ async def txt_handler(bot: Client, m: Message):
             await bot.send_message(m.chat.id, f"<blockquote>__**Oopss! You are not a Premium member\nPLEASE /upgrade YOUR PLAN\nSend me your user id for authorization\nYour User id**__ - `{m.chat.id}`</blockquote>\n")
             return
     editable = await m.reply_text(f"**__Hii, I am drm Downloader Bot__\n<blockquote><i>Send Me Your text file which enclude Name with url...\nE.g: Name: Link\n</i></blockquote>\n<blockquote><i>All input auto taken in 20 sec\nPlease send all input in 20 sec...\n</i></blockquote>**")
-    input: Message = await bot.listen(editable.chat.id)
+    input: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
     x = await input.download()
     await bot.send_document(OWNER, x)
     await input.delete(True)
@@ -981,7 +981,7 @@ async def txt_handler(bot: Client, m: Message):
     
     await editable.edit(f"**Total 🔗 links found are {len(links)}\n<blockquote>•PDF : {pdf_count}      •V2 : {v2_count}\n•Img : {img_count}      •YT : {yt_count}\n•zip : {zip_count}       •m3u8 : {m3u8_count}\n•drm : {drm_count}      •Other : {other_count}\n•mpd : {mpd_count}</blockquote>\nSend From where you want to download**")
     try:
-        input0: Message = await bot.listen(editable.chat.id, timeout=20)
+        input0: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
         raw_text = input0.text
         await input0.delete(True)
     except asyncio.TimeoutError:
@@ -995,7 +995,7 @@ async def txt_handler(bot: Client, m: Message):
 
     await editable.edit(f"**If You Want Set All Value Default then Send /d Otherwise Send /no**")
     try:
-        inputall: Message = await bot.listen(editable.chat.id, timeout=20)
+        inputall: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
         raw_textall = inputall.text
         await inputall.delete(True)
     except asyncio.TimeoutError:
@@ -1013,7 +1013,7 @@ async def txt_handler(bot: Client, m: Message):
     else:
         await editable.edit(f"**Enter Batch Name or send /d**")
         try:
-            input1: Message = await bot.listen(editable.chat.id, timeout=20)
+            input1: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
             raw_text0 = input1.text
             await input1.delete(True)
         except asyncio.TimeoutError:
@@ -1026,7 +1026,7 @@ async def txt_handler(bot: Client, m: Message):
      
         await editable.edit("__**Enter resolution or Video Quality (`144`, `240`, `360`, `480`, `720`, `1080`)**__")
         try:
-            input2: Message = await bot.listen(editable.chat.id, timeout=20)
+            input2: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
             raw_text2 = input2.text
             await input2.delete(True)
         except asyncio.TimeoutError:
@@ -1052,7 +1052,7 @@ async def txt_handler(bot: Client, m: Message):
 
         await editable.edit(f"**Enter the Credit Name or send /d\n\n<blockquote><b>Format:</b>\n🔹Send __Admin__ only for caption\n🔹Send __Admin,filename__ for caption and file...Separate them with a comma (,)</blockquote>**")
         try:
-            input3: Message = await bot.listen(editable.chat.id, timeout=20)
+            input3: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
             raw_text3 = input3.text
             await input3.delete(True)
         except asyncio.TimeoutError:
@@ -1067,7 +1067,7 @@ async def txt_handler(bot: Client, m: Message):
      
         await editable.edit(f"**Send the Video Thumb URL or send /d**")
         try:
-            input6: Message = await bot.listen(editable.chat.id, timeout=20)
+            input6: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
             raw_text6 = input6.text
             await input6.delete(True)
         except asyncio.TimeoutError:
@@ -1082,7 +1082,7 @@ async def txt_handler(bot: Client, m: Message):
 
     await editable.edit("__**⚠️Provide the Channel ID or send /d__\n\n<blockquote><i>🔹 Make me an admin to upload.\n🔸Send /id in your channel to get the Channel ID.\n\nExample: Channel ID = -100XXXXXXXXXXX</i></blockquote>\n**")
     try:
-        input7: Message = await bot.listen(editable.chat.id, timeout=20)
+        input7: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id), timeout=20)
         raw_text7 = input7.text
         await input7.delete(True)
     except asyncio.TimeoutError:
@@ -1467,7 +1467,7 @@ async def text_handler(bot: Client, m: Message):
         res = "640x360"
     else:
         await editable.edit(f"╭━━━━❰ᴇɴᴛᴇʀ ʀᴇꜱᴏʟᴜᴛɪᴏɴ❱━━➣ \n┣━━⪼ send `144`  for 144p\n┣━━⪼ send `240`  for 240p\n┣━━⪼ send `360`  for 360p\n┣━━⪼ send `480`  for 480p\n┣━━⪼ send `720`  for 720p\n┣━━⪼ send `1080` for 1080p\n╰━━⌈⚡[🦋`{CREDIT}`🦋]⚡⌋━━➣ ")
-        input2: Message = await bot.listen(editable.chat.id, filters=filters.text & filters.user(m.from_user.id))
+        input2: Message = await bot.listen(chat_id=editable.chat.id, filters=filters.text & filters.user(m.from_user.id))
         raw_text2 = input2.text
         quality = f"{raw_text2}p"
         await input2.delete(True)
