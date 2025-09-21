@@ -461,7 +461,7 @@ async def getcookies_handler(client: Client, m: Message):
 async def caption_handler(client: Client, m: Message):
     global caption
     editable = await m.reply_text("**Caption Style**\n\n<b>01 •Send /d for Default Caption Style.\n02. •Send /simple for Simple Caption Style.</b>")
-    inputcap: Message = await bot.listen(editable.chat.id)
+    inputcap: Message = await bot.listen(chat_id=message.chat.id)
     caption = inputcap.text
     if caption == '/d':
         await editable.edit(f"**Caption Set in Default Style ✅**")
@@ -473,7 +473,7 @@ async def caption_handler(client: Client, m: Message):
 async def vidwatermark_handler(client: Client, m: Message):
     global vidwatermark
     editable = await m.reply_text("**Send Video Watermark text, else Send /d**")
-    input8: Message = await bot.listen(editable.chat.id)
+    input8: Message = await bot.listen(chat_id=message.chat.id)
     vidwatermark  = input8.text
     if vidwatermark == '/d':
         await editable.edit(f"**Video Watermark Disabled ✅**")
@@ -485,7 +485,7 @@ async def vidwatermark_handler(client: Client, m: Message):
 async def topic_handler(client: Client, m: Message):
     global topic
     editable = await m.reply_text("**If you want to topic wise uploader : send `yes` or send /d**\n\n<blockquote><b>Topic fetch from (bracket) in title</b></blockquote>")
-    input: Message = await bot.listen(editable.chat.id)
+    input: Message = await bot.listen(chat_id=message.chat.id)
     topic = input.text
     if topic == "yes":
         await editable.edit(f"**Topic Wise Uploading On ✅**")
@@ -497,7 +497,7 @@ async def topic_handler(client: Client, m: Message):
 async def token_handler(client: Client, m: Message):
     global cwtoken, cptoken, pwtoken
     editable = await m.reply_text("<b>Enter 𝐏𝐖/𝐂𝐖/𝐂𝐏 Working Token For 𝐌𝐏𝐃 𝐔𝐑𝐋 or send /d</b>")
-    input: Message = await bot.listen(editable.chat.id)
+    input: Message = await bot.listen(chat_id=message.chat.id)
     token = input.text
     if token == '/d':
         cwtoken = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJpYXQiOjE3MjQyMzg3OTEsImNvbiI6eyJpc0FkbWluIjpmYWxzZSwiYXVzZXIiOiJVMFZ6TkdGU2NuQlZjR3h5TkZwV09FYzBURGxOZHowOSIsImlkIjoiZEUxbmNuZFBNblJqVEROVmFWTlFWbXhRTkhoS2R6MDkiLCJmaXJzdF9uYW1lIjoiYVcxV05ITjVSemR6Vm10ak1WUlBSRkF5ZVNzM1VUMDkiLCJlbWFpbCI6Ik5Ga3hNVWhxUXpRNFJ6VlhiR0ppWTJoUk0wMVdNR0pVTlU5clJXSkRWbXRMTTBSU2FHRnhURTFTUlQwPSIsInBob25lIjoiVUhVMFZrOWFTbmQ1ZVcwd1pqUTViRzVSYVc5aGR6MDkiLCJhdmF0YXIiOiJLM1ZzY1M4elMwcDBRbmxrYms4M1JEbHZla05pVVQwOSIsInJlZmVycmFsX2NvZGUiOiJOalZFYzBkM1IyNTBSM3B3VUZWbVRtbHFRVXAwVVQwOSIsImRldmljZV90eXBlIjoiYW5kcm9pZCIsImRldmljZV92ZXJzaW9uIjoiUShBbmRyb2lkIDEwLjApIiwiZGV2aWNlX21vZGVsIjoiU2Ftc3VuZyBTTS1TOTE4QiIsInJlbW90ZV9hZGRyIjoiNTQuMjI2LjI1NS4xNjMsIDU0LjIyNi4yNTUuMTYzIn19.snDdd-PbaoC42OUhn5SJaEGxq0VzfdzO49WTmYgTx8ra_Lz66GySZykpd2SxIZCnrKR6-R10F5sUSrKATv1CDk9ruj_ltCjEkcRq8mAqAytDcEBp72-W0Z7DtGi8LdnY7Vd9Kpaf499P-y3-godolS_7ixClcYOnWxe2nSVD5C9c5HkyisrHTvf6NFAuQC_FD3TzByldbPVKK0ag1UnHRavX8MtttjshnRhv5gJs5DQWj4Ir_dkMcJ4JaVZO3z8j0OxVLjnmuaRBujT-1pavsr1CCzjTbAcBvdjUfvzEhObWfA1-Vl5Y4bUgRHhl1U-0hne4-5fF0aouyu71Y6W0eg'
