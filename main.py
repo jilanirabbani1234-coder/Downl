@@ -38,6 +38,11 @@ import aiofiles
 import zipfile
 import shutil
 import ffmpeg
+def make_safe_filename(name: str) -> str:
+    name = re.sub(r'[\\/*?:"<>|]', "_")        # illegal characters replace
+    name = re.sub(r'\s+', " ", name)           # multiple spaces → single space
+    name = name.strip().strip(".")             # leading/trailing spaces/dots remove
+    return name[:100]                          # max 100 chars
 
 # Initialize the bot
 bot = Client(
@@ -300,7 +305,7 @@ async def youtube_to_txt(client, message: Message):
                 title = result.get('title', 'youtube_playlist')
             else:
                 title = result.get('title', 'youtube_video')
-                safe_title = re.sub(r'[\\/*?:"<>|]', "_", title)
+                safe_title = make_safe_filename(title)
         except yt_dlp.utils.DownloadError as e:
             await message.reply_text(
                 f"<blockquote>{str(e)}</blockquote>"
@@ -312,7 +317,7 @@ async def youtube_to_txt(client, message: Message):
     if 'entries' in result:
         for entry in result['entries']:
             video_title = entry.get('title', 'No title')
-            video_title = re.sub(r'[\\/*?:"<>|]',"_", video_title)
+            video_title = make_safe_filename(video_title)
             url = entry['url']
             videos.append(f"{video_title}: {url}")
     else:
@@ -409,8 +414,7 @@ async def txt_handler(bot: Client, m: Message):
             audio_title = response.json().get('title', 'YouTube Video')
             except Exception as e:
                 print(f"Warning: Could not fetch title, using default. Error: {e}")
-            audio_title = re.sub(r'[\\/*?:"<>|]', "_", audio_title)
-            audio_title = audio_title.replace("_", " ")
+            audio_title = make_safe_filename(audio_title)
             name = f'{audio_title[:60]} {CREDIT}'        
             name1 = f'{audio_title} {CREDIT}'
 
@@ -1514,8 +1518,7 @@ async def text_handler(bot: Client, m: Message):
                 audio_title = response.json().get('title', 'YouTube Video')
                 except Exception as e:
                     print(f"Warning: Could not fetch title, using default. Error: {e}")
-                audio_title = re.sub(r'[\\/*?:"<>|]', "_", audio_title)
-                audio_title = audio_title.replace("_", " ")
+                audio_title = make_safe_filename(audio_title)
                 name = f'{audio_title[:60]}'        
                 name1 = f'{audio_title}'
             else:
