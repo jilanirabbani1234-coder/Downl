@@ -300,6 +300,7 @@ async def youtube_to_txt(client, message: Message):
                 title = result.get('title', 'youtube_playlist')
             else:
                 title = result.get('title', 'youtube_video')
+                safe_title = re.sub(r'[\\/*?:"<>|]', "_", title)
         except yt_dlp.utils.DownloadError as e:
             await message.reply_text(
                 f"<blockquote>{str(e)}</blockquote>"
@@ -311,6 +312,7 @@ async def youtube_to_txt(client, message: Message):
     if 'entries' in result:
         for entry in result['entries']:
             video_title = entry.get('title', 'No title')
+            video_title = re.sub(r'[\\/*?:"<>|]',"_", video_title)
             url = entry['url']
             videos.append(f"{video_title}: {url}")
     else:
@@ -319,7 +321,7 @@ async def youtube_to_txt(client, message: Message):
         videos.append(f"{video_title}: {url}")
 
     # Create and save the .txt file with the custom name
-    txt_file = os.path.join("downloads", f'{title}.txt')
+    txt_file = os.path.join("downloads", f'{safe_title}.txt')
     os.makedirs(os.path.dirname(txt_file), exist_ok=True)  # Ensure the directory exists
     with open(txt_file, 'w') as f:
         f.write('\n'.join(videos))
@@ -403,7 +405,7 @@ async def txt_handler(bot: Client, m: Message):
             url = "https://" + Vxy
             oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
             response = requests.get(oembed_url)
-            audio_title = response.json().get('title', 'YouTube Video')
+            audio_title = re.sub(r'[\/*?:"<>|]', "_", audio_title
             audio_title = audio_title.replace("_", " ")
             name = f'{audio_title[:60]} {CREDIT}'        
             name1 = f'{audio_title} {CREDIT}'
@@ -1504,7 +1506,7 @@ async def text_handler(bot: Client, m: Message):
             if "youtu" in url:
                 oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
                 response = requests.get(oembed_url)
-                audio_title = response.json().get('title', 'YouTube Video')
+                audio_title = re.sub(r'[\/*?:"<>|]', "_", audio_title
                 audio_title = audio_title.replace("_", " ")
                 name = f'{audio_title[:60]}'        
                 name1 = f'{audio_title}'
