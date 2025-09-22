@@ -307,7 +307,7 @@ async def youtube_to_txt(client, message: Message):
           if not result:
              await message.reply_text("⚠️ **Error**: No data extracted from YouTube link!")
              return
-            if 'entries' in result:
+          if 'entries' in result:
                 title = result.get('title', 'youtube_playlist')
             else:
                 title = result.get('title', 'youtube_video')
