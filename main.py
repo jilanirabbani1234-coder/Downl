@@ -420,23 +420,24 @@ async def txt_handler(bot: Client, m: Message):
 
             if "youtube.com" in url or "youtu.be" in url:
                 prog = await m.reply_text(f"<i><b>Audio Downloading</b></i>\n<blockquote><b>{str(count).zfill(3)}) {name1}</b></blockquote>")
-                cmd = f'yt-dlp -x --audio-format mp3 --cookies {cookies_file_path} "{url}" -o "{name}.mp3"'
-                print(f"Running command: {cmd}")
+                cmd = ['yt-dlp' '-x', '--audio-format', 'mp3', '--cookies', cookies_file_path, url, '-o', f'/tmp/{name}.mp3']
+                print(f"Running command: {''.join(cmd)}")
+                result = subprocess.run(cmd, capture_output=True, text=True)
                 os.system(cmd)
-                if os.path.exists(f'{name}.mp3'):
-                    await prog.delete(True)
-                    print(f"File {name}.mp3 exists, attempting to send...")
+                if result.returncode == 0 and os.path.exists(f'/tmp/{name}.mp3'):
+                   await prog.delete(True)
+                   print(f"File /tmp/{name}.mp3 exists, attempting to send...")
                     try:
                         await bot.send_document(chat_id=m.chat.id, document=f'{name}.mp3', caption=f'**🎵 Title : **[{str(count).zfill(3)}] - {name1}.mp3\n\n🔗**Video link** : {url}\n\n🌟** Extracted By** : {CREDIT}')
-                        os.remove(f'{name}.mp3')
+                        os.remove(f'/tmp/{name}.mp3')
                         count+=1
                     except Exception as e:
                         await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {url}', disable_web_page_preview=True)
                         count+=1
                 else:
                     await prog.delete(True)
-                    await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {url}', disable_web_page_preview=True)
-                    count+=1
+                    await m.reply_text(f'⚠️**Downloading Failed**⚠️\n**Name** =>> `{str(count).zfill(3)} {name1}`\n**Url** =>> {url}\n**Error** =>> {result.stderr}', disable_web_page_preview=True)
+                    count += 1
                                
     except Exception as e:
         await m.reply_text(f"<b>Failed Reason:</b>\n<blockquote><b>{str(e)}</b></blockquote>")
