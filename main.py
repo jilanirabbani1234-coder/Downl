@@ -1515,19 +1515,20 @@ async def text_handler(bot: Client, m: Message):
     arg =1
     channel_id = m.chat.id
     try:
-            Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","").replace("?si=", "").split("&")[0]
+            Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","").replace("?si=", "").split("&")[0].strip()
             url = Vxy
 
             if "youtu" in url:
-                oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
-                audio_title = "YouTube Video"  # <- add this line at the very top
-                response = requests.get(oembed_url)
-                audio_title = response.json().get('title', 'YouTube Video')
+               oembed_url = f"https://www.youtube.com/oembed?url={url}&format=json"
+               try:
+                  response = requests.get(oembed_url, timeout=10)
+                  audio_title = response.json().get('title', 'YouTube Video')
                 except Exception as e:
-                    print(f"Warning: Could not fetch title, using default. Error: {e}")
+                  print(f"Warning: Could not fetch title, using default. Error: {e}")
+                  audio_title = "YouTube Video"
                 audio_title = make_safe_filename(audio_title)
-                name = f'{audio_title[:60]}'        
-                name1 = f'{audio_title}'
+                name = f'{make_safe_filename(audio_title[:60])}'
+                name1 = f'{make_safe_filename(audio_title)}'
             else:
                 name1 = links.replace("(", "[").replace(")", "]").replace("_", " ").replace("\t", "").replace(":", " ").replace("/", " ").replace("+", " ").replace("#", " ").replace("|", " ").replace("@", " ").replace("*", " ").replace(".", " ").replace("https", "").replace("http", "").strip()
                 name = f'{name1[:60]}'
@@ -1539,8 +1540,7 @@ async def text_handler(bot: Client, m: Message):
                         url = re.search(r"(https://.*?playlist.m3u8.*?)\"", text).group(1)
 
             if "acecwply" in url:
-                cmd = f'yt-dlp -o "{name}.%(ext)s" -f "bestvideo[height<={raw_text2}]+bestaudio" --hls-prefer-ffmpeg --no-keep-video --remux-video mkv --no-warning "{url}"'
-
+                cmd = ['yt-dlp', '-o', f'/tmp/{name}.%(ext)s', '-f', f'bestvideo[height<={raw_text2}]+bestaudio', '--hls-prefer-ffmpeg', '--no-keep-video', '--remux-video', 'mkv', '--no-warning', '--cookies', '/tmp/youtube_cookies.txt', url]
             elif "https://cpvod.testbook.com/" in url or "classplusapp.com/drm/" in url:
                 url = url.replace("https://cpvod.testbook.com/","https://media-cdn.classplusapp.com/drm/")
                 url = f"https://covercel.vercel.app/extract_keys?url={url}@bots_updatee&user_id=7793257011"
