@@ -1515,7 +1515,7 @@ async def text_handler(bot: Client, m: Message):
     arg =1
     channel_id = m.chat.id
     try:
-            Vxy = link.replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
+            Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","").replace("?si=", "").split("&")[0]
             url = Vxy
 
             if "youtu" in url:
