@@ -309,7 +309,7 @@ async def youtube_to_txt(client, message: Message):
              return
           if 'entries' in result:
                 title = result.get('title', 'youtube_playlist')
-            else:
+          else:
                 title = result.get('title', 'youtube_video')
                 safe_title = make_safe_filename(title)
         except yt_dlp.utils.DownloadError as e:
