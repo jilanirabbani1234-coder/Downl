@@ -1138,7 +1138,7 @@ async def txt_handler(bot: Client, m: Message):
                 cancel_requested = False
                 return
   
-            Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","")
+            Vxy = links[i][1].replace("file/d/","uc?export=download&id=").replace("www.youtube-nocookie.com/embed", "youtu.be").replace("?modestbranding=1", "").replace("/view?usp=sharing","").replace("?si=", "").split("&")[0]
             url = "https://" + Vxy
             link0 = "https://" + Vxy
 
@@ -1147,8 +1147,8 @@ async def txt_handler(bot: Client, m: Message):
                 name = f'{str(count).zfill(3)}) {PRENAME} {name1[:60]}'
                 namef = f'{PRENAME} {name1[:60]}'
             else:
-                name = f'{str(count).zfill(3)}) {name1[:60]}'
-                namef = f'{name1[:60]}'
+                name = f'{str(count).zfill(3)}_{make_safe_filename(PRENAME)}_{make_safe_filename(name1[:60])}'
+                namef = f'{make_safe_filename(PRENAME)}_{make_safe_filename(name1[:60])}'
             
             if "visionias" in url:
                 async with ClientSession() as session:
@@ -1157,7 +1157,7 @@ async def txt_handler(bot: Client, m: Message):
                         url = re.search(r"(https://.*?playlist.m3u8.*?)\"", text).group(1)
 
             if "acecwply" in url:
-                cmd = f'yt-dlp -o "{name}.%(ext)s" -f "bestvideo[height<={raw_text2}]+bestaudio" --hls-prefer-ffmpeg --no-keep-video --remux-video mkv --no-warning "{url}"'
+                cmd = ['yt-dlp', '-o', f'/tmp/{name}.%(ext)s', '-f', f'bestvideo[height<={raw_text2}]+bestaudio', '--hls-prefer-ffmpeg', '--no-keep-video', '--remux-video', 'mkv', '--no-warning', '--cookies', '/tmp/youtube_cookies.txt', url]
          
             elif "https://cpvod.testbook.com/" in url or "classplusapp.com/drm/" in url:
                 url = url.replace("https://cpvod.testbook.com/","https://media-cdn.classplusapp.com/drm/")
