@@ -418,7 +418,7 @@ async def txt_handler(bot: Client, m: Message):
             audio_title = "YouTube Video"
             response = requests.get(oembed_url)
             audio_title = response.json().get('title', 'YouTube Video')
-            except Exception as e:
+    except Exception as e:
                 print(f"Warning: Could not fetch title, using default. Error: {e}")
             audio_title = make_safe_filename(audio_title)
             name = f'{audio_title[:60]} {CREDIT}'        
