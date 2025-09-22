@@ -295,12 +295,18 @@ async def youtube_to_txt(client, message: Message):
         'skip_download': True,
         'force_generic_extractor': True,
         'forcejson': True,
-        'cookies': 'youtube_cookies.txt'  # Specify the cookies file
+        'cookies': '/tmp/youtube_cookies.txt'  # Use /tmp/ for Render
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         try:
-            result = ydl.extract_info(youtube_link, download=False)
+          if not os.path.exists('/tmp/youtube_cookies.txt'):
+             await message.reply_text("⚠️ **Error**: Cookies file `/tmp/youtube_cookies.txt` not found!")
+             return
+          result = ydl.extract_info(youtube_link, download=False)
+          if not result:
+             await message.reply_text("⚠️ **Error**: No data extracted from YouTube link!")
+             return
             if 'entries' in result:
                 title = result.get('title', 'youtube_playlist')
             else:
@@ -326,7 +332,7 @@ async def youtube_to_txt(client, message: Message):
         videos.append(f"{video_title}: {url}")
 
     # Create and save the .txt file with the custom name
-    txt_file = os.path.join("downloads", f'{safe_title}.txt')
+    txt_file = os.path.join("/tmp", f'{safe_title}.txt')
     os.makedirs(os.path.dirname(txt_file), exist_ok=True)  # Ensure the directory exists
     with open(txt_file, 'w') as f:
         f.write('\n'.join(videos))
