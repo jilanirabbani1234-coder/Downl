@@ -4,4 +4,4 @@ tgcrypto==1.2.5
 aiohttp==3.9.1
 yt-dlp==2023.11.14
 requests==2.31.0
-Pillow==10.0.1
+Pillow==10.0.0
