@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: telegram-bot
+    env: python
+    plan: free
+    branch: main
+    buildCommand: |
+      pip install -r requirements.txt
+      wget https://github.com/yt-dlp/FFmpeg-Builds/releases/download/latest/ffmpeg-master-latest-linux64-gpl.tar.xz
+      tar -xf ffmpeg-master-latest-linux64-gpl.tar.xz
+      mv ffmpeg-master-latest-linux64-gpl/bin/* /usr/local/bin/
+    startCommand: python main.py
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.11.0
