@@ -3,7 +3,7 @@ services:
     name: telegram-bot
     env: python
     plan: free
-    buildCommand: pip install --no-build-isolation -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: python main.py
     envVars:
       - key: PYTHON_VERSION
